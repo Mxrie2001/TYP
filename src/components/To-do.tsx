@@ -1,6 +1,7 @@
 import { fetchItemsFromDynamoDBByUserID } from "./DynamoDB.tsx";
 import React, { useEffect, useState } from "react";
 import { useUser } from './UserContext';
+import { Link } from 'react-router-dom';
 
 const ToDo: React.FC = () => {
     const [items, setItems] = useState<any[]>([]);
@@ -33,11 +34,13 @@ const ToDo: React.FC = () => {
 
     return (
         <div>
+            <h1>My to do List</h1>
+            <button><Link to="/add-todo">Ajouter une nouvelle tâche</Link></button>
             {loading ? (
                 <p>Loading...</p> // Message de chargement
             ) : (
                 <>
-                    {error && <div style={{ color: 'red' }}>{error}</div>}
+                    {error && <div style={{color: 'red'}}>{error}</div>}
 
                     {items.length > 0 ? (
                         <ul>
@@ -45,7 +48,7 @@ const ToDo: React.FC = () => {
                                 <div key={index}>
                                     <h2>{item.Title}</h2>
                                     <p>{item.Content}</p>
-                                    <p>{item.CategoryID}</p>
+                                    {/*<p>{item.CategoryID}</p>*/}
                                     <p>{item.DateFinished}</p>
                                     <p>{item.Deadline}</p>
                                     <p>{item.Priority}</p>
