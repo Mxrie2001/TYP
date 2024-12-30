@@ -31,7 +31,17 @@ const Calendar: React.FC<CalendarProps> = ({ markedDays, currentMonth, onPrevMon
 
   const isMarked = (day: number) => {
     const dateStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    console.log(`Checking if ${dateStr} is marked: ${markedDays.includes(dateStr)}`);
     return markedDays.includes(dateStr);
+  };
+
+  const isToday = (day: number) => {
+    const today = new Date();
+    return (
+      day === today.getDate() &&
+      currentMonth.getMonth() === today.getMonth() &&
+      currentMonth.getFullYear() === today.getFullYear()
+    );
   };
 
   return (
@@ -54,8 +64,8 @@ const Calendar: React.FC<CalendarProps> = ({ markedDays, currentMonth, onPrevMon
             {week.map((day, dayIndex) => (
               <div
                 key={dayIndex}
-                className={`calendar-day border p-2 m-1 text-center ${day ? (isMarked(day) ? "bg-primary text-light" : "") : "empty"}`}
-              >
+                className={`calendar-day border p-2 m-1 text-center ${day ? (isMarked(day) ? "bg-primary text-light" : "") : "empty"} ${day && isToday(day) ? "today" : ""}`}
+                >
                 {day}
               </div>
             ))}

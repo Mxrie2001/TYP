@@ -23,11 +23,11 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onMarkAsDone }) => {
           <span className="priority">
             Priority: {task.priority === 1 ? "High" : task.priority === 2 ? "Medium" : "Low"}
           </span>
-          {/*<div className="task-actions">
+          <div className="task-actions">
             <button onClick={() => onMarkAsDone(index)}>
               {task.done ? "Undo" : "Mark as Done"}
             </button>
-          </div>*/}
+          </div>
         </div>
       ))}
     </div>

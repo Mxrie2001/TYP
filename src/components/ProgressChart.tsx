@@ -1,9 +1,8 @@
-// src/components/ProgressChart.tsx
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface ProgressChartProps {
-  data: { day: string; progress: number }[];
+  data: { day: string; completedTasks: number }[];
 }
 
 const ProgressChart: React.FC<ProgressChartProps> = ({ data }) => {
@@ -17,7 +16,7 @@ const ProgressChart: React.FC<ProgressChartProps> = ({ data }) => {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Line type="monotone" dataKey="progress" stroke="#007bff" />
+          <Line type="monotone" dataKey="completedTasks" stroke="#007bff" />
         </LineChart>
       </ResponsiveContainer>
     </div>

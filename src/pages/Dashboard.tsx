@@ -7,23 +7,29 @@ import ProgressIndicator from "../components/ProgressIndicator";
 import ProgressChart from "../components/ProgressChart";
 
 const Dashboard: React.FC = () => {
-  const [tasks, setTasks] = useState([
-    { title: "Finish report", dueDate: "2024-12-30", priority: 1, done: false },
-    { title: "Prepare slides", dueDate: "2024-12-31", priority: 2, done: false },
-    { title: "Team meeting", dueDate: "2024-12-29", priority: 3, done: true },
-    { title: "Urgent task", dueDate: "2024-12-28", priority: 1, done: true },
-    { title: "Important task", dueDate: "2024-12-27", priority: 1, done: true },
-    { title: "Important task", dueDate: "2025-01-12", priority: 1, done: false },
-    { title: "Important task", dueDate: "2025-01-02", priority: 1, done: false },
+  const [tasks, setTasks] = useState<{ title: string; dueDate: string; priority: number; done: boolean; completedDate: Date | null }[]>([
+    { title: "Finish report", dueDate: "2024-12-30", priority: 1, done: false, completedDate: null },
+    { title: "Prepare slides", dueDate: "2024-12-31", priority: 2, done: false, completedDate: null },
+    { title: "Team meeting", dueDate: "2024-12-29", priority: 3, done: false, completedDate: null },
+    { title: "Urgent task", dueDate: "2024-12-28", priority: 1, done: false, completedDate: null },
+    { title: "Important task", dueDate: "2024-12-27", priority: 1, done: false, completedDate: null },
+    { title: "Important task", dueDate: "2025-01-12", priority: 1, done: false, completedDate: null },
+    { title: "Important task", dueDate: "2025-01-02", priority: 1, done: false, completedDate: null },
   ]);
 
   const [topTasks, setTopTasks] = useState<typeof tasks>([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
+
   const handleMarkAsDone = (index: number) => {
-    const updatedTasks = [...tasks];
-    updatedTasks[index].done = !updatedTasks[index].done; // Toggle done status
-    setTasks(updatedTasks);
+    const taskIndex = tasks.findIndex(task => task.title === topTasks[index].title && task.dueDate === topTasks[index].dueDate);
+    if (taskIndex !== -1) {
+      const updatedTasks = [...tasks];
+      const task = updatedTasks[taskIndex];
+      task.done = !task.done; // Toggle done status
+      task.completedDate = task.done ? new Date() : null; // Set or clear completed date
+      setTasks(updatedTasks);
+    }
   };
 
   const handlePrevMonth = () => {
@@ -34,6 +40,18 @@ const Dashboard: React.FC = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1));
   };
 
+// Calculate progress based on completed tasks
+const calculateProgress = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Set time to the start of the day
+  const validTasks = tasks.filter(task => new Date(task.dueDate) >= today);
+  const totalTasks = validTasks.length;
+  const completedTasks = validTasks.filter(task => task.done).length;
+  const progress = (completedTasks / totalTasks) * 100;
+  return parseFloat(progress.toFixed(2));
+};
+
+// Calculate top tasks based on priority and due date
   useEffect(() => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Set time to the start of the day
@@ -55,26 +73,50 @@ const Dashboard: React.FC = () => {
     setTopTasks(filteredTasks);
   }, [tasks]);
 
-  // Calendar marked with days that have tasks
+  // Calendar marked with days that have tasks starting from today
   const markedDays = tasks
-    .filter((task) => new Date(task.dueDate) >= new Date())
+    .filter((task) => {
+      const taskDate = new Date(task.dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set time to the start of the day
+      return taskDate >= today;
+    })
     .map((task) => {
       const date = new Date(task.dueDate);
       return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     });
 
-  // Progress data for the week calculated through productivity of the day
-  const progressData = [
-    { day: "Mon", progress: 50 },
-    { day: "Tue", progress: 60 },
-    { day: "Wed", progress: 70 },
-    { day: "Thu", progress: 80 },
-    { day: "Fri", progress: 90 },
-    { day: "Sat", progress: 80 },
-    { day: "Sun", progress: 20 },
-  ];
 
-  return (
+  // Calculate progress data for the week
+  const calculateWeeklyProgress = () => {
+    const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const progressData = weekDays.map((day, index) => {
+      const dayStart = new Date();
+      dayStart.setDate(dayStart.getDate() - dayStart.getDay() + index);
+      dayStart.setHours(0, 0, 0, 0);
+
+      const dayEnd = new Date(dayStart);
+      dayEnd.setHours(23, 59, 59, 999);
+
+      const dayTasks = tasks.filter(task => {
+        if (!task.completedDate) return false;
+        const taskDate = new Date(task.completedDate);
+        return taskDate >= dayStart && taskDate <= dayEnd;
+      });
+
+      const completedTasks = dayTasks.length;
+
+      return { day, completedTasks };
+    });
+
+    return progressData;
+  };
+
+  const progressData = calculateWeeklyProgress();
+
+  console.log("Progress Data:", progressData); // Log progress data for debugging
+
+ return (
     <div className="d-flex">
       <Sidebar />
       <div className="flex-grow-1">
@@ -85,7 +127,7 @@ const Dashboard: React.FC = () => {
               <TaskList tasks={topTasks} onMarkAsDone={handleMarkAsDone} />
             </div>
             <div className="col-md-6">
-              <ProgressIndicator progress={75} />
+              <ProgressIndicator progress={calculateProgress()} />
             </div>
           </div>
           <div className="row mt-3">
@@ -98,7 +140,7 @@ const Dashboard: React.FC = () => {
               />
             </div>
             <div className="col-md-6">
-              <ProgressChart data={progressData} />
+            <ProgressChart data={progressData} />
             </div>
           </div>
         </div>
