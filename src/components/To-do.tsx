@@ -2,6 +2,7 @@ import { fetchItemsFromDynamoDBByUserID } from "./DynamoDB.tsx";
 import React, { useEffect, useState } from "react";
 import { useUser } from './UserContext';
 import { Link } from 'react-router-dom';
+import { deleteTodo } from './TodoService';
 
 const ToDo: React.FC = () => {
     const [items, setItems] = useState<any[]>([]);
@@ -32,6 +33,16 @@ const ToDo: React.FC = () => {
         }
     }, [user]); // Dépendance pour rerun l'effet si l'utilisateur change
 
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteTodo(id); // Appel de la fonction pour supprimer la tâche de DynamoDB
+            setItems(prevItems => prevItems.filter(item => item.ID !== id)); // Mettre à jour l'état local
+        } catch (err) {
+            console.error("Erreur lors de la suppression de la tâche:", err);
+            setError("Erreur lors de la suppression de la tâche.");
+        }
+    };
+
     return (
         <div>
             <h1>My to do List</h1>
@@ -53,7 +64,7 @@ const ToDo: React.FC = () => {
                                     <p>{item.Deadline}</p>
                                     <p>{item.Priority}</p>
                                     <p>{item.State}</p>
-                                    <p>{item.UserID}</p>
+                                    <button onClick={() => handleDelete(item.ID)}>Supprimer</button>
                                 </div>
                             ))}
                         </ul>
