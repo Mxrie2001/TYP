@@ -7,7 +7,7 @@ const Sidebar: React.FC = () => {
         <i className="bi bi-list-task me-2" style={{ fontSize: "1.5rem" }}></i>
         <h2 className="fs-5">TYP</h2>      
         <ul className="list-unstyled">
-        <li><a href="#" className="text-white">All Tasks</a></li>
+        <li><a href="#" className="text-blue">All Tasks</a></li>
       </ul>
     </div>
   );

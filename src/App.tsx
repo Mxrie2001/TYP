@@ -20,8 +20,8 @@ const App: React.FC = () => {
             <Router>
                 <Menu />
                 <div>
-                  <Dashboard />
                     <Routes>
+                        <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/todo" element={<ToDo />} />
                         <Route path="/add-todo" element={<AddTodoPage />} />

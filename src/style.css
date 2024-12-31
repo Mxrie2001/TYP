@@ -17,9 +17,8 @@ body {
   
   
   /* Sidebar */
-  .sidebar {
-    background-color: #343a40;
-    color: white;
+  .sidebar h2{
+    color: blue;
     padding: 20px;
   }
   
