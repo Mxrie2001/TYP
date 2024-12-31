@@ -1,0 +1,51 @@
+.TaskResearch{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.item{
+    border: 3px solid lightslategray;
+    background-color: ghostwhite;
+    border-radius: 8px;
+    padding: 0px 0px 0px 10px;
+    margin: 5px 0 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.itemWarn{
+    border: 3px solid #ecae5c;
+    background-color: #ffd47d;
+    border-radius: 8px;
+    padding: 0px 0px 0px 10px;
+    margin: 5px 0 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.itemDanger{
+    border: 3px solid #d54848;
+    background-color: #ff7d7d;
+    border-radius: 8px;
+    padding: 0px 0px 0px 10px;
+    margin: 5px 0 5px 0;
+    display: flex;
+    align-items: center;
+}
+
+.taskTitle{
+
+}
+
+.taskContent{
+
+}
+
+.taskDeadline{
+    background-color: #d54848;
+    color: white;
+    border-radius: 8px;
+
+}
