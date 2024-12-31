@@ -14,27 +14,32 @@ const Calendar: React.FC<CalendarProps> = ({ markedDays, currentMonth, onPrevMon
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+  // Create an array of days in the month
   const daysArray = [
     ...Array(startDay).fill(null),
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1)
   ];
 
+  // Fill the remaining days with null
   const remainingDays = 7 - (daysArray.length % 7);
   if (remainingDays !== 7) {
     daysArray.push(...Array(remainingDays).fill(null));
   }
 
+  // Split days into weeks
   const weeks = [];
   while (daysArray.length) {
     weeks.push(daysArray.splice(0, 7));
   }
 
+  // Check if a day is marked
   const isMarked = (day: number) => {
     const dateStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     console.log(`Checking if ${dateStr} is marked: ${markedDays.includes(dateStr)}`);
     return markedDays.includes(dateStr);
   };
 
+  // Check if a day is today to color it if there's a task due
   const isToday = (day: number) => {
     const today = new Date();
     return (

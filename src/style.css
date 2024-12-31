@@ -40,6 +40,14 @@ body {
   
   
   /* Task Cards */
+  .task-list h1 {
+    margin: 20px; /* Add space below the "Top Tasks" text */
+  }
+
+  .task-card h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
   .task-card {
     background-color: white;
     border-radius: 8px;

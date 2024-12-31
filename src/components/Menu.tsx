@@ -16,6 +16,7 @@ const Menu: React.FC = () => {
                 <h3><Link to="/login"> Sign in </Link></h3>
                 ) : (
                     <>
+                    <h3><Link to="/dashboard">Dashboard</Link></h3>
                     <h3><Link to="/todo">ToDo</Link></h3>
                     <h3><Link to="/account">My account</Link></h3>
                     <h3><Link to="/logout">Logout</Link></h3>

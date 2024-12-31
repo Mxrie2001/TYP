@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
-import TopBar from "../components/TopBar";
+//import TopBar from "../components/TopBar";
 import TaskList from "../components/TaskList";
 import Calendar from "../components/Calendar";
 import ProgressIndicator from "../components/ProgressIndicator";
@@ -113,14 +113,10 @@ const calculateProgress = () => {
   };
 
   const progressData = calculateWeeklyProgress();
-
-  console.log("Progress Data:", progressData); // Log progress data for debugging
-
  return (
     <div className="d-flex">
       <Sidebar />
       <div className="flex-grow-1">
-        <TopBar />
         <div className="container my-3">
           <div className="row">
             <div className="col-md-6">
