@@ -1,43 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useInfoUser } from '../InfoUserContext'; // Hook personnalisé pour accéder au contexte utilisateur
-import { usePet } from '../PetContext'; // Hook pour accéder au contexte compagnon
-import { getUserInfo } from '../InfoUserService'; // Fonction pour récupérer les infos utilisateur
-import { getPetsByUser } from '../PetService'; // Fonction pour récupérer tous les animaux pour un utilisateur
+import { useInfoUser } from '../InfoUserContext';
+import { usePet } from '../PetContext';
+import { getUserInfo } from '../InfoUserService';
+import { getPetsByUser } from '../PetService';
 
 interface LocationState {
     userID: string;
 }
 
 const MyAccount: React.FC = () => {
-    const { userInfo, setUserInfo } = useInfoUser(); // Accéder et mettre à jour le contexte utilisateur
-    const { pets = [], setPets } = usePet(); // Accéder et mettre à jour le contexte compagnon (valeur par défaut si pets est undefined)
-    const location = useLocation(); // Utiliser le hook useLocation pour récupérer l'état de la route
-    const navigate = useNavigate(); // Hook pour la navigation
-    const { userID } = location.state as LocationState; // Récupérer l'ID de l'utilisateur depuis l'état de la route
+    const { userInfo, setUserInfo } = useInfoUser();
+    const { pets = [], setPets } = usePet();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const { userID } = location.state as LocationState;
 
-    const [refresh, setRefresh] = useState(false); // Etat pour forcer le rafraîchissement
-    const [error, setError] = useState<string | null>(null); // Etat pour gérer les erreurs
+    const [refresh, setRefresh] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fonction pour charger les informations utilisateur et compagnon lors du montage du composant
         const fetchUserData = async () => {
             try {
-                // Charger les informations utilisateur
                 const userData = await getUserInfo(userID);
                 if (userData) {
                     setUserInfo(userData);
                 } else {
-                    console.error('Utilisateur non trouvé');
                     setError('Utilisateur non trouvé');
                 }
 
-                // Charger les informations compagnon avec GSI (UserID-index)
-                const petData = await getPetsByUser(userID); // Utiliser GSI pour récupérer les animaux par userID
+                const petData = await getPetsByUser(userID);
                 if (petData) {
-                    setPets(petData); // Mettre à jour le contexte avec les données récupérées
+                    setPets(petData);
                 } else {
-                    console.error('Aucun compagnon trouvé pour cet utilisateur');
                     setError('Aucun compagnon trouvé pour cet utilisateur');
                 }
             } catch (error) {
@@ -46,13 +41,12 @@ const MyAccount: React.FC = () => {
             }
         };
 
-        fetchUserData(); // Charger les données lors du montage du composant
-    }, [userID, refresh, setUserInfo, setPets]); // Dépend de refresh pour recharger les données après un ajout
+        fetchUserData();
+    }, [userID, refresh, setUserInfo, setPets]);
 
     const handleAddPet = () => {
-        // Rediriger vers la page AddPet pour ajouter un compagnon
         navigate('/add-pet', { state: { userID } });
-        setRefresh(!refresh);  // Force le rafraîchissement des données
+        setRefresh(!refresh);
     };
 
     if (error) {
@@ -78,12 +72,11 @@ const MyAccount: React.FC = () => {
                     <p><strong>Nom :</strong> {userInfo.LastName}</p>
                     <p><strong>Email :</strong> {userInfo.Email}</p>
 
-                    {/* Ajouter un bouton pour modifier le profil */}
                     <button onClick={() => navigate('/edit-profile', { state: { userID: userInfo.UserID } })}>
                         Modifier le profil
                     </button>
 
-                    <h3>Mon Compagnon :</h3>
+                    <h3>Mon(Mes) Compagnon(s) :</h3>
                     {pets.length > 0 ? (
                         pets.map((pet) => (
                             <div key={pet.ID}>
@@ -91,21 +84,39 @@ const MyAccount: React.FC = () => {
                                 <p><strong>Type :</strong> {pet.Type}</p>
                                 <p><strong>Âge :</strong> {pet.Age} ans</p>
 
-                                {/* Bouton pour modifier les informations du compagnon */}
-                                <button onClick={() => navigate('/edit-pet', { state: { userID: pet.UserID, petID: pet.ID } })}>
+                                <button
+                                    onClick={() => {
+                                        if (userID && pet.ID) {
+                                            navigate('/edit-pet', {state: {userID, petID: pet.ID}});
+                                        } else {
+                                            alert("Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.");
+                                        }
+                                    }}
+                                >
                                     Modifier les informations du compagnon
+                                </button>
+
+                                <button
+                                    onClick={() => {
+                                        if (userID && pet.ID) {
+                                            navigate('/todo-list', {state: {userID, petID: pet.ID}});
+                                        } else {
+                                            alert("Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.");
+                                        }
+                                    }}
+                                >
+                                    To-Do List
                                 </button>
                             </div>
                         ))
                     ) : (
-                        <div>
-                            <p>Vous n'avez pas encore ajouté de compagnon.</p>
-                            {/* Bouton pour ajouter un compagnon */}
-                            <button onClick={handleAddPet}>
-                                Ajouter un compagnon
-                            </button>
-                        </div>
+                        <p>Vous n'avez pas encore ajouté de compagnon.</p>
                     )}
+
+                    {/* Toujours afficher le bouton pour ajouter un compagnon */}
+                    <button onClick={handleAddPet}>
+                        Ajouter un compagnon
+                    </button>
                 </div>
             ) : (
                 <p>Chargement...</p>
