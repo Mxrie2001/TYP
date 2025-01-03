@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import '@aws-amplify/ui-react/styles.css';
+import { Authenticator } from '@aws-amplify/ui-react'; // Utiliser Authenticator pour gérer l'état de connexion
 import CreateProfile from './components/CreateProfile.tsx';
 import MyAccount from './components/MyAccount';
 import EditProfile from './components/EditProfile.tsx';
@@ -9,53 +9,56 @@ import EditPet from './components/EditPet.tsx';
 import TodoList from './components/TodoList.tsx';
 import CreateTask from './components/CreateTask.tsx';
 import Match from './components/Match.tsx';
-
+import MenuBar from './components/Menu.tsx';
+import "./App.css"
 
 function App() {
-    const navigate = useNavigate();
-
     return (
-        <Authenticator>
-            {({ signOut, user }) => (
-                <div>
-                    <h1>Bienvenue, {user?.username}</h1>
-                    <button onClick={signOut}>Se déconnecter</button>
-                    {/* Vérifier que l'ID de l'utilisateur est bien transmis ici */}
-                    <button
-                        onClick={() =>
-                            navigate('/create-profile', {state: {userID: user?.username}})
-                        }
-                    >
-                        Compléter mon profil
-                    </button>
-                    {/* Ajouter un bouton pour accéder à la page "Mon Compte", en passant l'ID de l'utilisateur */}
-                    <button onClick={() => navigate('/my-account', {state: {userID: user?.username}})}>
-                        Mon Compte
-                    </button>
+        <div className="HomePage">
+            <img src="logo2t.png" alt="Logo" className="menu-logo"/>
+            <div>
+                <h1>Welcome to Paw'fect Match!</h1>
+                <p>Are you a lover of animals and looking to connect with someone special, make new friends, or simply
+                    meet like-minded people? Look no further! With Paw'fect Match, you can fill out your profile, add
+                    your beloved companions (pets), and link them to a to-do list. Based on this, we’ll match you with
+                    others who share your passions, creating the perfect connections for you and your furry friends!</p>
+            </div>
 
-                    <button onClick={() => navigate('/match', {state: {userID: user?.username}})}>
-                        Mes Matches
-                    </button>
-                </div>
-            )}
-        </Authenticator>
+        </div>
     );
 }
 
 export default function RootApp() {
     return (
         <Router>
-            <Routes>
-            <Route path="/" element={<App />} />
-                <Route path="/create-profile" element={<CreateProfile />} />
-                <Route path="/my-account" element={<MyAccount />} />
-                <Route path="/edit-profile" element={<EditProfile />} />
-                <Route path="/add-pet" element={<AddPet />} />
-                <Route path="/edit-pet" element={<EditPet />} />
-                <Route path="/todo-list" element={<TodoList />} />
-                <Route path="/create-task" element={<CreateTask />} />
-                <Route path="/match" element={<Match />} />
-            </Routes>
+            <Authenticator>
+                {({user}) => (
+                    <div>
+                        {user ? (
+                            <>
+                                {/* Si l'utilisateur est connecté, afficher le menu */}
+                                <MenuBar/>
+                                <Routes>
+                                <Route path="/" element={<App />} />
+                                    <Route path="/create-profile" element={<CreateProfile />} />
+                                    <Route path="/my-account" element={<MyAccount />} />
+                                    <Route path="/edit-profile" element={<EditProfile />} />
+                                    <Route path="/add-pet" element={<AddPet />} />
+                                    <Route path="/edit-pet" element={<EditPet />} />
+                                    <Route path="/todo-list" element={<TodoList />} />
+                                    <Route path="/create-task" element={<CreateTask />} />
+                                    <Route path="/match" element={<Match />} />
+                                </Routes>
+                            </>
+                        ) : (
+                            <div>
+                                {/* Si l'utilisateur n'est pas connecté, afficher un message ou la page de connexion */}
+                                <h2>Veuillez vous connecter pour accéder à l'application.</h2>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </Authenticator>
         </Router>
     );
 }

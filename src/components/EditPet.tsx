@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getPetInfo, updatePetInfo } from '../PetService'; // Importer les fonctions nécessaires
+import "./Page.css";
 
 interface LocationState {
     petID: string;

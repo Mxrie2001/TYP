@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addPet } from '../PetService'; // Importer la fonction addPet du service
+import "./Page.css";
 
 interface LocationState {
     userID: string;
@@ -17,6 +18,14 @@ const AddPet: React.FC = () => {
         age: '',
     });
 
+    const petTypes = [
+        { label: 'Dog', value: 'dog' },
+        { label: 'Cat', value: 'cat' },
+        { label: 'Bird', value: 'bird' },
+        { label: 'Rabbit', value: 'rabbit' },
+        { label: 'Raccoon', value: 'racoon' },
+    ];
+
     useEffect(() => {
         if (!userID) {
             alert('Impossible de récupérer l’ID utilisateur. Veuillez réessayer.');
@@ -24,7 +33,7 @@ const AddPet: React.FC = () => {
         }
     }, [userID, navigate]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
@@ -59,49 +68,62 @@ const AddPet: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Ajouter un compagnon</h1>
+        <div className="PageContent">
+            <h1 className="Title">Add a new Pet</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Nom :</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="type">Type :</label>
-                    <input
-                        type="text"
-                        id="type"
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label htmlFor="age">Âge :</label>
-                    <input
-                        type="number"
-                        id="age"
-                        name="age"
-                        value={formData.age}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Ajouter</button>
-                <button type="button" onClick={() => navigate('/my-account', { state: { userID } })}>
-                    Annuler
-                </button>
+                <div className="form-group">
+                    <img src="newPet.jpg" alt="new Pet" className="pp"/>
+                    <div className="InputRegister">
+                        <div>
+                            <label htmlFor="name"><strong>Name :</strong></label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="type"><strong>Type : </strong></label>
+                            <select
+                                id="type"
+                                name="type"
+                                value={formData.type}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select a type</option>
+                                {petTypes.map((pet) => (
+                                    <option key={pet.value} value={pet.value}>
+                                        {pet.label}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="age"><strong>Age :</strong></label>
+                            <input
+                                type="number"
+                                id="age"
+                                name="age"
+                                value={formData.age}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </div>
+                    </div>
+                    <div className="BtnEdit">
+                        <button type="submit">Add</button>
+                        <button className="cancelBtn" type="button" onClick={() => navigate('/my-account', {state: {userID}})}>
+                            Cancel
+                        </button>
+                    </div>
             </form>
         </div>
-    );
+);
 };
 
 export default AddPet;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { registerUserInDynamoDB } from '../InfoUserService';
+import "./Page.css"
 
 interface LocationState {
     userID: string;
@@ -50,43 +51,52 @@ const CreateProfile: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Compléter votre profil</h1>
+        <div className="PageContent">
+            <h1 className="Title">My Profile</h1>
+            <p>New to this platform? Fill out your profile and let Paw'match find your perfect match!</p>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="firstname">Prénom :</label>
-                    <input
-                        type="text"
-                        id="firstname"
-                        name="firstname"
-                        value={formData.firstname}
-                        onChange={handleChange}
-                        required
-                    />
+                <div className="form-group">
+                    <img src="comeOn.png" alt="Come on!" className="pp"/>
+                    <div className="InputRegister">
+                        <div>
+                            <label htmlFor="firstname"><strong>First Name :</strong></label>
+                            <input
+                                type="text"
+                                id="firstname"
+                                name="firstname"
+                                value={formData.firstname}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="lastname"><strong>Last Name :</strong></label>
+                            <input
+                                type="text"
+                                id="lastname"
+                                name="lastname"
+                                value={formData.lastname}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="email"><strong>Email :</strong></label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                    </div>
+
                 </div>
-                <div>
-                    <label htmlFor="lastname">Nom :</label>
-                    <input
-                        type="text"
-                        id="lastname"
-                        name="lastname"
-                        value={formData.lastname}
-                        onChange={handleChange}
-                        required
-                    />
+                <div className="BtnEdit">
+                    <button type="submit">Enregistrer</button>
                 </div>
-                <div>
-                    <label htmlFor="email">Email :</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit">Enregistrer</button>
             </form>
         </div>
     );

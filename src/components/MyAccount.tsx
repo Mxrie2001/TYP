@@ -4,6 +4,9 @@ import { useInfoUser } from '../InfoUserContext';
 import { usePet } from '../PetContext';
 import { getUserInfo } from '../InfoUserService';
 import { getPetsByUser } from '../PetService';
+import "./Page.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faList, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface LocationState {
     userID: string;
@@ -61,62 +64,97 @@ const MyAccount: React.FC = () => {
         return <div>Chargement des compagnons...</div>;
     }
 
+    const getPetImage = (type: string): string => {
+        switch (type.toLowerCase()) {
+            case 'dog':
+                return 'dog.png';
+            case 'cat':
+                return 'cat.png';
+            case 'bird':
+                return 'bird.png';
+            case 'rabbit':
+                return 'bunny.png';
+            case 'racoon':
+                return 'racoon.png';
+            default:
+                return 'newPet.jpg';
+        }
+    };
+
     return (
-        <div>
-            <h1>Mon Compte</h1>
+        <div className="PageContent">
+            <h1 className="Title">My Profile</h1>
             {userInfo ? (
-                <div>
-                    <h3>Informations utilisateur :</h3>
-                    <p><strong>ID Utilisateur :</strong> {userInfo.UserID}</p>
-                    <p><strong>Prénom :</strong> {userInfo.FirstName}</p>
-                    <p><strong>Nom :</strong> {userInfo.LastName}</p>
-                    <p><strong>Email :</strong> {userInfo.Email}</p>
-
-                    <button onClick={() => navigate('/edit-profile', { state: { userID: userInfo.UserID } })}>
-                        Modifier le profil
-                    </button>
-
-                    <h3>Mon(Mes) Compagnon(s) :</h3>
-                    {pets.length > 0 ? (
-                        pets.map((pet) => (
-                            <div key={pet.ID}>
-                                <p><strong>Nom :</strong> {pet.Name}</p>
-                                <p><strong>Type :</strong> {pet.Type}</p>
-                                <p><strong>Âge :</strong> {pet.Age} ans</p>
-
-                                <button
-                                    onClick={() => {
-                                        if (userID && pet.ID) {
-                                            navigate('/edit-pet', {state: {userID, petID: pet.ID}});
-                                        } else {
-                                            alert("Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.");
-                                        }
-                                    }}
-                                >
-                                    Modifier les informations du compagnon
-                                </button>
-
-                                <button
-                                    onClick={() => {
-                                        if (userID && pet.ID) {
-                                            navigate('/todo-list', {state: {userID, petID: pet.ID}});
-                                        } else {
-                                            alert("Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.");
-                                        }
-                                    }}
-                                >
-                                    To-Do List
-                                </button>
+                <div className="Infos">
+                    <div>
+                        <h3>My Informations :</h3>
+                        <div className="MyInfos">
+                            <img src="profilepp.jpg" alt="Profile pp" className="pp" />
+                            <div className="infoContent">
+                                <p><strong>First Name :</strong> {userInfo.FirstName}</p>
+                                <p><strong>Last Name :</strong> {userInfo.LastName}</p>
+                                <p><strong>Email :</strong> {userInfo.Email}</p>
                             </div>
-                        ))
-                    ) : (
-                        <p>Vous n'avez pas encore ajouté de compagnon.</p>
-                    )}
+                        </div>
+                        <div className="BtnEdit">
+                            <button onClick={() => navigate('/edit-profile', { state: { userID: userInfo.UserID } })}>
+                                <p>Edit</p> <FontAwesomeIcon icon={faPenToSquare} />
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="PetAdd">
+                            <h3>Pet(s) Informations :</h3>
+                            <button className="add" onClick={handleAddPet}>
+                                <FontAwesomeIcon icon={faPlus}/>
+                            </button>
+                        </div>
+                        {pets.length > 0 ? (
+                            pets.map((pet) => (
+                                <div key={pet.ID}>
+                                <div className="PetInfos">
+                                        <img src={getPetImage(pet.Type)} alt={pet.Type} className="pp"/>
+                                        <div className="PetInfoContent">
+                                            <p><strong>Name :</strong> {pet.Name}</p>
+                                            <p><strong>Type :</strong> {pet.Type}</p>
+                                            <p><strong>Age :</strong> {pet.Age} ans</p>
+                                        </div>
+                                    </div>
 
-                    {/* Toujours afficher le bouton pour ajouter un compagnon */}
-                    <button onClick={handleAddPet}>
-                        Ajouter un compagnon
-                    </button>
+
+                                    {/*<button*/}
+                                    {/*    onClick={() => {*/}
+                                    {/*        if (userID && pet.ID) {*/}
+                                    {/*            navigate('/edit-pet', { state: { userID, petID: pet.ID } });*/}
+                                    {/*        } else {*/}
+                                    {/*            alert("Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.");*/}
+                                    {/*        }*/}
+                                    {/*    }}*/}
+                                    {/*>*/}
+                                    {/*    Edit <FontAwesomeIcon icon={faPenToSquare} />*/}
+                                    {/*</button>*/}
+                                    <div className="BtnEdit">
+                                        <button
+                                            onClick={() => {
+                                                if (userID && pet.ID) {
+                                                    navigate('/todo-list', {state: {userID, petID: pet.ID}});
+                                                } else {
+                                                    alert("Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.");
+                                                }
+                                            }}
+                                        >
+                                            <p>To-Do List</p> <FontAwesomeIcon icon={faList}/>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            ))
+                        ) : (
+                            <p>Vous n'avez pas encore ajouté de compagnon.</p>
+                        )}
+
+
+                    </div>
                 </div>
             ) : (
                 <p>Chargement...</p>

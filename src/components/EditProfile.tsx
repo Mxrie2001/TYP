@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';  // Importer les hooks useLocation et useNavigate
 import { getUserInfo } from '../InfoUserService';  // Fonction pour récupérer les données utilisateur
 import { updateUserInfo } from '../InfoUserService';  // Fonction pour mettre à jour les données utilisateur
+import "./Page.css";
 
 interface LocationState {
     userID: string;
@@ -60,40 +61,47 @@ const EditProfile: React.FC = () => {
     };
 
     return (
-        <div>
-            <h1>Modifier mon profil</h1>
+        <div className="PageContent">
+            <h1 className="Title">Edit my profile</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Prénom</label>
-                    <input
-                        type="text"
-                        name="FirstName"
-                        value={formData.FirstName}
-                        onChange={handleChange}
-                    />
+                <div className="form-group">
+                    <img src="profilepp.jpg" alt="Profile pp" className="pp"/>
+                    <div className="InputRegister">
+                        <div>
+                            <label><strong>First Name :</strong></label>
+                            <input
+                                type="text"
+                                name="FirstName"
+                                value={formData.FirstName}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <label><strong>Last Name :</strong></label>
+                            <input
+                                type="text"
+                                name="LastName"
+                                value={formData.LastName}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div>
+                            <label><strong>Email :</strong></label>
+                            <input
+                                type="email"
+                                name="Email"
+                                value={formData.Email}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label>Nom</label>
-                    <input
-                        type="text"
-                        name="LastName"
-                        value={formData.LastName}
-                        onChange={handleChange}
-                    />
+                <div className="BtnEdit">
+                    <button type="submit">Save</button>
                 </div>
-                <div>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="Email"
-                        value={formData.Email}
-                        onChange={handleChange}
-                    />
-                </div>
-                <button type="submit">Enregistrer les modifications</button>
             </form>
         </div>
-    );
+);
 };
 
 export default EditProfile;

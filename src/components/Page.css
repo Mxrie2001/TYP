@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script:wght@400..700&family=Yanone+Kaffeesatz:wght@400;600;700&display=swap');
+
+.PageContent{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Title{
+    font-family: "Dancing Script", serif;
+    font-size:3em;
+}
+
+.Infos{
+    display: flex;
+}
+
+.Infos div{
+    padding-inline: 1em;
+}
+
+.Infos h3, .Infos strong{
+    font-family: "Dancing Script", serif;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: bolder;
+}
+
+.PageContent button {
+    background-color: #f9b44c;
+    padding: 0.5em;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    height: 2em;
+}
+
+.MyInfos, .PetInfos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.infoContent, .PetInfoContent{
+    padding-inline: 2em;
+}
+
+.pp{
+    width: 10em;
+}
+
+
+.BtnEdit{
+    display: flex;
+    justify-content: end;
+}
+
+.BtnEdit p{
+    margin-right: 0.5em;
+}
+
+.PetAdd{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add{
+    border-radius: 100%;
+    height: fit-content;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group{
+    display: flex;
+    padding-bottom: 1em;
+}
+
+.InputRegister{
+    display: flex;
+    flex-direction: column;
+    padding-inline: 1em;
+    justify-content: center;
+}
+
+.InputRegister div{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+
+.cancelBtn{
+    margin-left: 0.5em;
+    background-color: lightgray!important;
+}

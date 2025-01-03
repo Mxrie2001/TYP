@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script:wght@400..700&family=Yanone+Kaffeesatz:wght@400;600;700&display=swap');
+
+.menu-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9b44c;
+    font-family: "Yanone Kaffeesatz", serif;
+    padding-inline: 2em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    width: 100vw;
+}
+
+.menu-nav{
+    display: flex;
+    width: 30%;
+    justify-content: space-between;
+}
+
+.menu-nav h1{
+    font-weight: 100;
+}
+
+h1{
+    padding-inline: 0.25em;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+button :hover{
+    cursor: pointer;
+}
+
+/* Style pour le titre de la barre de menu */
+.menu-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: auto;
+    font-family: "Dancing Script", serif;
+}
+
+.menu-title img{
+    width: 4em;
+    /*border-radius: 100%;*/
+}
+
+
+/* Style pour les erreurs */
+.error-message {
+    font-size: 16px;
+    color: #ff4747;
+    text-align: center;
+    font-weight: bold;
+}
