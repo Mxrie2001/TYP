@@ -11,6 +11,7 @@ import CreateTask from './components/CreateTask.tsx';
 import Match from './components/Match.tsx';
 import MenuBar from './components/Menu.tsx';
 import "./App.css"
+import ChatMessages from "./components/CreateChat.tsx";
 
 function App() {
     return (
@@ -48,6 +49,7 @@ export default function RootApp() {
                                     <Route path="/todo-list" element={<TodoList />} />
                                     <Route path="/create-task" element={<CreateTask />} />
                                     <Route path="/match" element={<Match />} />
+                                    <Route path="/chat" element={<ChatMessages />} />
                                 </Routes>
                             </>
                         ) : (
