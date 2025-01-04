@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { addTask } from '../TaskService'; // Importer la fonction addTask du service
+import './Page.css';
 
 interface LocationState {
     userID: string;
@@ -9,7 +10,7 @@ interface LocationState {
 
 const CreateTask: React.FC = () => {
     const location = useLocation();
-    const { userID, petID } = location.state as LocationState; // Récupérer userID et petID depuis l'état de navigation
+    const { userID, petID } = location.state as LocationState; // Récupérer userID et petID depuis l’état de navigation
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -50,50 +51,75 @@ const CreateTask: React.FC = () => {
             });
 
             console.log('Tâche ajoutée avec succès');
-            navigate('/todo-list', {state: {userID, petID: petID}}); // Redirige vers la page "Mon Compte"
+            navigate('/todo-list', { state: { userID, petID } }); // Redirige vers la page "To-Do List"
         } catch (error) {
             console.error('Erreur lors de l’ajout de la tâche :', error);
             alert('Une erreur est survenue lors de l’ajout de la tâche.');
         }
     };
 
+    const taskCategories = [
+        'Walk',
+        'Training',
+        'Socialization',
+        'Park outing',
+        'Veterinary visit',
+        'Medications',
+        'Group training',
+        'Playdate',
+        'Community event',
+        'Group walk',
+        'Pet meetup',
+    ];
+
+
     return (
-        <div>
-            <h1>Ajouter une tâche</h1>
+        <div className="PageContent">
+            <h1 className="Title">Add a Task</h1>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="description">Description :</label>
-                    <input
-                        type="text"
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
-                    />
+                <div className="form-group">
+                    <img src="addTodo.jpg" alt="new Task" className="pp" />
+                    <div className="InputRegister">
+                        <div>
+                            <label htmlFor="description"><strong>Description :</strong></label>
+                            <input
+                                type="text"
+                                id="description"
+                                name="description"
+                                value={formData.description}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="categorie"><strong>Category :</strong></label>
+                            <select
+                                id="categorie"
+                                name="categorie"
+                                value={formData.categorie}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Select a category</option>
+                                {taskCategories.map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <label htmlFor="categorie">Catégorie :</label>
-                    <select
-                        id="categorie"
-                        name="categorie"
-                        value={formData.categorie}
-                        onChange={handleChange}
-                        required
+                <div className="BtnEdit">
+                    <button type="submit">Add</button>
+                    <button
+                        className="cancelBtn"
+                        type="button"
+                        onClick={() => navigate('/todo-list', { state: { userID, petID } })}
                     >
-                        <option value="">Sélectionner une catégorie</option>
-                        <option value="Balade">Balade</option>
-                        <option value="Éducation">Éducation</option>
-                        <option value="Socialisation">Socialisation</option>
-                        <option value="Sortie au parc">Sortie au parc</option>
-                        <option value="Visite chez le vétérinaire">Visite chez le vétérinaire</option>
-                        <option value="Medications">Medications</option>
-                    </select>
+                        Cancel
+                    </button>
                 </div>
-                <button type="submit">Ajouter</button>
-                <button type="button" onClick={() => navigate('/todo-list', { state: {userID, petID: petID} })}>
-                    Annuler
-                </button>
             </form>
         </div>
     );

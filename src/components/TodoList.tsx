@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getTasksByPet, toggleTaskCompletion, deleteTask } from '../TaskService';
+import { getTasksByPet } from '../TaskService';
+import { getPetInfo } from '../PetService';
 import { useTask } from '../TaskContext';
+import "./Page.css"
 
 interface LocationState {
     petID: string;
@@ -14,43 +16,73 @@ const TodoList: React.FC = () => {
     const navigate = useNavigate();
     const { userID, petID } = location.state as LocationState;
 
+    const [petInfo, setPetInfo] = useState({
+        name: '',
+        type: '',
+        age: '',
+    });
+
     const [error, setError] = useState<string | null>(null);
-    const [refresh, setRefresh] = useState(false);
+    const [refresh] = useState(false);
+
+    const getPetImage = (type: string): string => {
+        switch (type.toLowerCase()) {
+            case 'dog':
+                return 'dog.png';
+            case 'cat':
+                return 'cat.png';
+            case 'bird':
+                return 'bird.png';
+            case 'rabbit':
+                return 'bunny.png';
+            case 'racoon':
+                return 'racoon.png';
+            default:
+                return 'newPet.jpg';
+        }
+    };
 
     useEffect(() => {
+        if (!petID || !userID) {
+            alert('Impossible de récupérer l’ID du compagnon ou de l’utilisateur. Veuillez réessayer.');
+            navigate('/');
+            return;
+        }
+
+        const fetchPetData = async () => {
+            try {
+                const petData = await getPetInfo(petID);
+                if (petData) {
+                    setPetInfo({
+                        name: petData.Name,
+                        type: petData.Type,
+                        age: petData.Age.toString(),
+                    });
+                } else {
+                    console.error('Compagnon non trouvé');
+                }
+            } catch (error) {
+                console.error('Erreur lors du chargement des informations du compagnon', error);
+                setError('Erreur lors du chargement des informations du compagnon');
+            }
+        };
+
         const fetchTasks = async () => {
             try {
                 const fetchedTasks = await getTasksByPet(petID);
-                console.log('Tâches récupérées:', fetchedTasks);  // Affiche les tâches dans la console
+                console.log('Tâches récupérées:', fetchedTasks);
                 setTasks(fetchedTasks);
             } catch {
                 setError('Erreur lors du chargement des tâches');
             }
         };
 
+        fetchPetData();
         fetchTasks();
-    }, [petID, refresh, setTasks]);
+    }, [petID, userID, refresh, setTasks, navigate]);
 
     const handleCreateTask = () => {
         navigate('/create-task', { state: { userID, petID } });
-    };
-
-    const handleToggleTaskCompletion = async (taskID: number, completed: boolean) => {
-        try {
-            await toggleTaskCompletion(taskID, completed);
-            setRefresh(!refresh);
-        } catch {
-            setError('Erreur lors de la mise à jour de la tâche');
-        }
-    };
-
-    const handleDeleteTask = async (taskID: number) => {
-        try {
-            await deleteTask(taskID);
-            setRefresh(!refresh);
-        } catch {
-            setError('Erreur lors de la suppression de la tâche');
-        }
     };
 
     if (error) {
@@ -58,27 +90,36 @@ const TodoList: React.FC = () => {
     }
 
     return (
-        <div>
-            <h1>Liste des tâches pour {petID}</h1>
-            {tasks.length > 0 ? (
-                tasks.map((task) => (
-                    <div key={task.TaskID}>
-                        <p><strong>Description :</strong> {task.Description || 'Aucune description'}</p>
-                        <p><strong>Catégorie :</strong> {task.Categorie || 'Aucune catégorie'}</p>
-                        <p><strong>Status :</strong> {task.Completed ? 'Terminée' : 'Non terminée'}</p>
-                        <button onClick={() => handleToggleTaskCompletion(task.TaskID, !task.Completed)}>
-                            {task.Completed ? 'Marquer comme non terminée' : 'Marquer comme terminée'}
-                        </button>
-                        <button onClick={() => handleDeleteTask(task.TaskID)}>Supprimer</button>
+        <div className="PageContent">
+            <h1 className="Title">{petInfo.name}'s Todos</h1>
+            <div className="Container">
+                <div className="form-group">
+                    <img
+                        src={getPetImage(petInfo.type)}
+                        alt={`${petInfo.type}`}
+                        className="pp"
+                    />
+                    <div className="InputRegister">
+                        {tasks.length > 0 ? (
+                            tasks.map((task) => (
+                                <div className="todos" key={task.TaskID}>
+                                    <p><strong>Description :</strong> {task.Description || 'No description'}</p>
+                                    <p><strong>Category :</strong> {task.Categorie || 'No catégorie'}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No todos for this pet.</p>
+                        )}
                     </div>
-                ))
-            ) : (
-                <p>Aucune tâche pour ce compagnon.</p>
-            )}
+                    </div>
 
-            <button onClick={handleCreateTask}>Ajouter une tâche</button>
-        </div>
-    );
-};
+                    <div className="BtnEdit">
+                        <button onClick={handleCreateTask}>Add</button>
+                    </div>
+                </div>
 
-export default TodoList;
+            </div>
+            );
+            };
+
+            export default TodoList;

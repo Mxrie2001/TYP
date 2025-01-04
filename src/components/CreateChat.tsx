@@ -3,6 +3,7 @@ import { PutCommand, ScanCommand } from '@aws-sdk/lib-dynamodb';
 import { dynamoDBClient } from '../DynamoDB';
 import { useLocation } from "react-router-dom";
 import { getUserInfo } from '../InfoUserService.tsx';
+import "./Page.css";
 
 interface LocationState {
     userID: string;
@@ -98,7 +99,7 @@ const ChatMessages: React.FC = () => {
 
     return (
         <div style={styles.container}>
-            <h1 style={styles.header}>Chat Room</h1>
+            <h1 style={styles.header} className="Title">Chat Room</h1>
             <div style={styles.chatBox}>
                 {messages.map((msg) => (
                     <div

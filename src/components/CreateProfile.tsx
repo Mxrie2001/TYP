@@ -95,7 +95,7 @@ const CreateProfile: React.FC = () => {
 
                 </div>
                 <div className="BtnEdit">
-                    <button type="submit">Enregistrer</button>
+                    <button type="submit">Save</button>
                 </div>
             </form>
         </div>

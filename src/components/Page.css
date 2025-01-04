@@ -20,7 +20,7 @@
     padding-inline: 1em;
 }
 
-.Infos h3, .Infos strong{
+.Infos h3, .Infos strong, .todos strong{
     font-family: "Dancing Script", serif;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -48,6 +48,8 @@
 
 .pp{
     width: 10em;
+    margin-right: 1em;
+    height: fit-content;
 }
 
 
@@ -71,7 +73,7 @@
     height: fit-content;
 }
 
-form{
+form, .Container{
     display: flex;
     flex-direction: column;
 }
@@ -84,7 +86,7 @@ form{
 .InputRegister{
     display: flex;
     flex-direction: column;
-    padding-inline: 1em;
+    /*padding-inline: 1em;*/
     justify-content: center;
 }
 
@@ -98,4 +100,63 @@ form{
 .cancelBtn{
     margin-left: 0.5em;
     background-color: lightgray!important;
+}
+
+
+.todos{
+    border: 1px solid lightgray;
+    border-radius: 15px;
+    padding: 0.25em;
+    margin-bottom:0.5em;
+    margin-top: 0.5em;
+}
+
+.todos p{
+    margin: 0;
+
+}
+
+.MatchCard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2em;
+}
+
+
+
+.PetCard{
+    display: flex;
+}
+
+.PetImage{
+    width: 5em;
+    margin-right: 1em;
+    height: fit-content;
+}
+
+.PetDetails p{
+    margin: 0;
+}
+
+
+.MatchCard h3{
+    font-family: "Dancing Script", serif;
+    text-decoration: underline;
+    font-size: 2em;
+    text-underline-offset: 3px;
+    font-weight: bolder;
+    margin: 0;
+}
+
+.MatchCard h4{
+    align-self: flex-start;
+    text-decoration: underline;
+}
+
+
+.myMatches{
+    display: flex;
+    flex-wrap: wrap;
 }
